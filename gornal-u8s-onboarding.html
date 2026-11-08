@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gornal DC U8s Ravens Player Onboarding</title>
+<style>
+  :root { --club:#1f2a44; --accent:#c8102e; --bg:#f4f5f8; --line:#d5d9e2; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background:var(--bg); color:#1b1f2a; line-height:1.4; }
+  .wrap { max-width:640px; margin:0 auto; padding:20px 16px 48px; }
+  header { text-align:center; padding:12px 0 8px; }
+  header img { width:120px; height:120px; object-fit:contain; }
+  h1 { font-size:1.5rem; margin:8px 0 4px; color:var(--club); }
+  header p { margin:0; color:#555; font-size:.95rem; }
+  form { background:#fff; border-radius:14px; padding:20px; box-shadow:0 1px 4px rgba(0,0,0,.08); margin-top:12px; }
+  h2 { font-size:1.15rem; color:#fff; background:var(--club); margin:24px -20px 14px; padding:10px 20px; }
+  h2:first-of-type { margin-top:0; border-radius:14px 14px 0 0; margin-top:-20px; }
+  label { display:block; font-weight:600; font-size:.92rem; margin:14px 0 4px; }
+  .hint { font-weight:400; color:#666; font-size:.85rem; }
+  input, select, textarea { width:100%; padding:11px 12px; font-size:1rem; border:1px solid var(--line); border-radius:8px; background:#fff; font-family:inherit; }
+  input:focus, select:focus, textarea:focus { outline:2px solid var(--accent); border-color:var(--accent); }
+  textarea { min-height:70px; resize:vertical; }
+  .row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:480px){ .row { grid-template-columns:1fr; } }
+  .upload { border:2px dashed var(--line); border-radius:10px; padding:14px; background:#fafbfd; }
+  .check { display:flex; gap:10px; align-items:flex-start; margin-top:18px; font-weight:400; font-size:.88rem; }
+  .check input { width:auto; margin-top:3px; }
+  button { margin-top:22px; width:100%; padding:14px; font-size:1.05rem; font-weight:700; color:#fff; background:var(--accent); border:0; border-radius:10px; cursor:pointer; }
+  button:disabled { opacity:.6; cursor:wait; }
+  .msg { margin-top:16px; padding:12px 14px; border-radius:8px; font-size:.95rem; display:none; }
+  .msg.ok { display:block; background:#e6f5ea; color:#14532d; }
+  .msg.err { display:block; background:#fdeaea; color:#7f1d1d; }
+  .hp { position:absolute; left:-9999px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- Save the club badge next to this file as badge.png (or replace the src below) -->
+    <img src="badge.png" alt="Gornal DC badge"
+         onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 120 120%22%3E%3Cpath d=%22M60 6 12 22v36c0 29 21 48 48 56 27-8 48-27 48-56V22z%22 fill=%22%231f2a44%22/%3E%3Ctext x=%2260%22 y=%2272%22 font-family=%22Arial%22 font-size=%2236%22 font-weight=%22700%22 fill=%22%23fff%22 text-anchor=%22middle%22%3EGDC%3C/text%3E%3C/svg%3E'">
+    <h1>Gornal DC U8s Ravens Player Onboarding</h1>
+    <p>Please complete all sections so we can register your child with the team.</p>
+  </header>
+
+  <form id="f" enctype="multipart/form-data" novalidate>
+    <!-- Hidden settings for FormSubmit (emails a summary table to both addresses) -->
+    <input type="hidden" name="_subject" value="New player onboarding – Gornal DC U8s Ravens">
+    <input type="hidden" name="_cc" value="donna.oneill1709@gmail.com">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off">
+
+    <h2>Player details</h2>
+
+    <label for="p_name">Full name</label>
+    <input id="p_name" name="Player full name" required autocomplete="off">
+
+    <div class="row">
+      <div>
+        <label for="p_dob">Date of birth</label>
+        <input id="p_dob" name="Player date of birth" type="date" required>
+      </div>
+      <div>
+        <label for="p_gender">Gender</label>
+        <select id="p_gender" name="Player gender" required>
+          <option value="">Select…</option>
+          <option>Male</option><option>Female</option><option>Other</option><option>Prefer not to say</option>
+        </select>
+      </div>
+    </div>
+
+    <label for="p_addr">Address</label>
+    <textarea id="p_addr" name="Player address" required></textarea>
+
+    <label for="p_fan">FA number (FAN) <span class="hint">– if they have one</span></label>
+    <input id="p_fan" name="Player FA number (FAN)" inputmode="numeric" autocomplete="off">
+
+    <label for="p_team">Current team and league <span class="hint">– if already playing for a team, please give the team name and the league it is registered to (if known)</span></label>
+    <textarea id="p_team" name="Current team and league"></textarea>
+
+    <label for="p_id">Photo of valid ID <span class="hint">– e.g. passport or birth certificate</span></label>
+    <div class="upload">
+      <input id="p_id" name="attachment" type="file" accept="image/*,application/pdf" required>
+      <div class="hint" style="margin-top:6px">Take a photo or choose a file (JPG, PNG or PDF, max 5&nbsp;MB).</div>
+    </div>
+
+    <h2>Parent / carer contact details</h2>
+
+    <label for="c_name">Name</label>
+    <input id="c_name" name="Parent/carer name" required autocomplete="name">
+
+    <label for="c_addr">Address <span class="hint">– if different from the player's, otherwise write "same"</span></label>
+    <textarea id="c_addr" name="Parent/carer address" required></textarea>
+
+    <label for="c_email">Email</label>
+    <input id="c_email" name="email" type="email" required autocomplete="email">
+
+    <div class="row">
+      <div>
+        <label for="c_dob">Date of birth</label>
+        <input id="c_dob" name="Parent/carer date of birth" type="date" required autocomplete="bday">
+      </div>
+      <div>
+        <label for="c_phone">Phone number</label>
+        <input id="c_phone" name="Parent/carer phone" type="tel" required autocomplete="tel">
+      </div>
+    </div>
+
+    <label class="check">
+      <input type="checkbox" id="consent" required>
+      <span>I confirm the details above are correct and I agree to Gornal DC using them, and the ID photo, to register my child with the team and league.</span>
+    </label>
+
+    <button type="submit" id="btn">Submit</button>
+    <div id="msg" class="msg" role="status"></div>
+  </form>
+</div>
+
+<script>
+  const form = document.getElementById('f');
+  const msg = document.getElementById('msg');
+  const btn = document.getElementById('btn');
+  const MAX = 5 * 1024 * 1024;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    msg.className = 'msg';
+    if (!form.reportValidity()) return;
+
+    const file = document.getElementById('p_id').files[0];
+    if (file && file.size > MAX) {
+      msg.className = 'msg err';
+      msg.textContent = 'That file is over 5 MB. Please choose a smaller photo or PDF.';
+      return;
+    }
+
+    btn.disabled = true; btn.textContent = 'Sending…';
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/domaners@gmail.com', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && (data.success === true || data.success === 'true')) {
+        form.reset();
+        msg.className = 'msg ok';
+        msg.textContent = 'Thank you! Your details have been sent to the club. We\'ll be in touch soon.';
+      } else {
+        throw new Error(data.message || 'Send failed');
+      }
+    } catch (err) {
+      msg.className = 'msg err';
+      msg.textContent = 'Sorry, something went wrong and your form was not sent. Please try again, or contact the club directly.';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Submit';
+    }
+  });
+</script>
+</body>
+</html>
