@@ -44,12 +44,13 @@
     <p>Please complete all sections so we can register your child with the team.</p>
   </header>
 
-  <form id="f" enctype="multipart/form-data" novalidate>
+  <form id="f" method="POST" action="https://formsubmit.co/domaners@gmail.com" enctype="multipart/form-data">
     <!-- Hidden settings for FormSubmit (emails a summary table to both addresses) -->
     <input type="hidden" name="_subject" value="New player onboarding – Gornal DC U8s Ravens">
     <input type="hidden" name="_cc" value="donna.oneill1709@gmail.com">
     <input type="hidden" name="_template" value="table">
     <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_next" id="next" value="">
     <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off">
 
     <h2>Player details</h2>
@@ -123,40 +124,27 @@
   const msg = document.getElementById('msg');
   const btn = document.getElementById('btn');
   const MAX = 5 * 1024 * 1024;
+  const base = location.href.split('#')[0].split('?')[0];
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    msg.className = 'msg';
-    if (!form.reportValidity()) return;
+  // Returned here by FormSubmit after a successful send
+  if (new URLSearchParams(location.search).get('sent') === '1') {
+    form.style.display = 'none';
+    const ok = document.createElement('div');
+    ok.className = 'msg ok';
+    ok.textContent = "Thank you! Your details have been sent to the club. We'll be in touch soon.";
+    form.parentNode.appendChild(ok);
+  }
 
+  form.addEventListener('submit', (e) => {
     const file = document.getElementById('p_id').files[0];
     if (file && file.size > MAX) {
+      e.preventDefault();
       msg.className = 'msg err';
       msg.textContent = 'That file is over 5 MB. Please choose a smaller photo or PDF.';
       return;
     }
-
+    document.getElementById('next').value = base + '?sent=1';
     btn.disabled = true; btn.textContent = 'Sending…';
-    try {
-      const res = await fetch('https://formsubmit.co/ajax/domaners@gmail.com', {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: new FormData(form)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (res.ok && (data.success === true || data.success === 'true')) {
-        form.reset();
-        msg.className = 'msg ok';
-        msg.textContent = 'Thank you! Your details have been sent to the club. We\'ll be in touch soon.';
-      } else {
-        throw new Error(data.message || 'Send failed');
-      }
-    } catch (err) {
-      msg.className = 'msg err';
-      msg.textContent = 'Sorry, something went wrong and your form was not sent. Please try again, or contact the club directly.';
-    } finally {
-      btn.disabled = false; btn.textContent = 'Submit';
-    }
   });
 </script>
 </body>
